@@ -49,18 +49,20 @@ export default class RoutingManager {
 
   setupRouting(state) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
-      const uiState = this.stateMapping.routeToState(route);
-      const currentUIState = this.getAllUIStates({
+      this.currentUIState = this.stateMapping.routeToState(route);
+
+      const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(uiState, currentUIState)) return;
+      if (isEqual(this.currentUIState, widgetsUIState)) return;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: state,
         instantSearchInstance: this.instantSearchInstance,
-        uiState,
+        uiState: this.currentUIState,
       });
 
       const fullHelperState = {
@@ -156,18 +158,20 @@ export default class RoutingManager {
 
   onHistoryChange(fn) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
-      const uiState = this.stateMapping.routeToState(route);
-      const currentUIState = this.getAllUIStates({
+      this.currentUIState = this.stateMapping.routeToState(route);
+
+      const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(uiState, currentUIState)) return;
+      if (isEqual(this.currentUIState, widgetsUIState)) return;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: helper.state,
         instantSearchInstance: this.instantSearchInstance,
-        uiState,
+        uiState: this.currentUIState,
       });
 
       const fullSearchParameters = {
@@ -177,6 +181,5 @@ export default class RoutingManager {
 
       fn(fullSearchParameters);
     });
-    return;
   }
 }
